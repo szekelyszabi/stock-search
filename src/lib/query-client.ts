@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { QueryClient } from "@tanstack/react-query"
-import { APP_CONFIG } from "@/constants/config"
+import { QueryClient } from '@tanstack/react-query'
+import { APP_CONFIG } from '@/constants/config'
 
 export function makeQueryClient() {
   return new QueryClient({
@@ -13,10 +13,9 @@ export function makeQueryClient() {
         retry: (failureCount, error) => {
           if (
             error instanceof Error &&
-            (error.message.includes("rate limit") ||
-              error.message.includes("Invalid"))
+            (error.message.includes('rate limit') || error.message.includes('Invalid'))
           ) {
-            return false;
+            return false
           }
           return failureCount < 2
         },
@@ -25,5 +24,5 @@ export function makeQueryClient() {
         retry: false,
       },
     },
-  });
+  })
 }

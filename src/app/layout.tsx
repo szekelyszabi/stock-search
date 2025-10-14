@@ -1,13 +1,13 @@
-import Providers from "./providers"
-import type { Metadata } from "next"
-import "./globals.css"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
+import Providers from './providers'
+import type { Metadata } from 'next'
+import './globals.css'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
-  title: "Stock Search",
-  description: "Real-time stock search and analysis",
-};
+  title: 'Stock Search',
+  description: 'Real-time stock search and analysis',
+}
 
 export default function RootLayout({
   children,
@@ -24,5 +24,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  );
+  )
 }

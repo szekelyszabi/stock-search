@@ -122,10 +122,7 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
             <CardTitle>Price History (30 Days)</CardTitle>
           </CardHeader>
           <CardContent>
-            <PriceHistoryChart
-              data={historyData || []}
-              symbol={quote.symbol}
-            />
+            <PriceHistoryChart data={historyData || []} symbol={quote.symbol} />
           </CardContent>
         </Card>
 
