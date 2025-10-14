@@ -1,14 +1,18 @@
 'use client'
 
+import { Heart } from 'lucide-react'
 import { useStockQuote } from '@/hooks/use-stock-quote'
+import { useFavorites } from '@/hooks/use-favorites'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { MOCK_PRICE_HISTORY } from '@/lib/mock-data'
 import { PriceHistoryChart } from '@/components/price-history-chart'
+import { MOCK_PRICE_HISTORY } from '@/lib/mock-data'
 
 export function StockDetailClient({ symbol }: { symbol: string }) {
   const { data: quote, error, isLoading } = useStockQuote(symbol)
+  const { isFavorite, toggleFavorite, isHydrated } = useFavorites()
 
   if (isLoading || !quote) {
     return (
@@ -63,12 +67,12 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
             <CardContent className="pt-6">
               <div className="space-y-2">
                 <h3 className="font-semibold">
-                  {isRateLimit ? 'Rate Limit Reached' : 'Error'}
+                  {isRateLimit ? '⏰ Rate Limit Reached' : '❌ Error'}
                 </h3>
                 <p className="text-sm text-muted-foreground">{error.message}</p>
                 {isRateLimit && (
                   <p className="text-sm text-muted-foreground">
-                    The API has a limit of 25 requests/day. Please try again later.
+                    The AlphaVantage API has a limit of 25 requests/day. Please try again later.
                   </p>
                 )}
               </div>
@@ -84,7 +88,19 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
   return (
     <div className="px-4 py-8 sm:px-8">
       <main className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">{quote.symbol}</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-bold">{quote.symbol}</h1>
+          {isHydrated && (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => toggleFavorite(quote.symbol)}
+              aria-label={isFavorite(quote.symbol) ? 'Remove from favorites' : 'Add to favorites'}
+            >
+              <Heart className={isFavorite(quote.symbol) ? 'fill-red-500 text-red-500' : ''} />
+            </Button>
+          )}
+        </div>
 
         <Card className="mb-6">
           <CardContent className="pt-6">
