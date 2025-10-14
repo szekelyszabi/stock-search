@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useStockSearch } from '@/hooks/use-stock-search'
@@ -11,11 +11,17 @@ import { POPULAR_STOCKS } from '@/lib/mock-data'
 
 export default function SearchPage() {
   const [query, setQuery] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+
   const debouncedQuery = useDebounce(query)
   const { data: results, isLoading, error } = useStockSearch(debouncedQuery)
 
   const displayStocks = query.length >= 2 ? results : POPULAR_STOCKS
   const showPopularLabel = query.length < 2
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   return (
     <div className="px-4 py-8 sm:px-8">
@@ -28,6 +34,7 @@ export default function SearchPage() {
 
         <div className="mb-4">
           <Input
+            ref={inputRef}
             type="text"
             placeholder="Search stocks..."
             value={query}
