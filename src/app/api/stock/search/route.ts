@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     const bestMatches = data.bestMatches || []
 
-    const results: StockSearchItem[] = bestMatches.map((match: StockSearchResult) => ({
+    const mappedResults: StockSearchItem[] = bestMatches.map((match: StockSearchResult) => ({
       symbol: match['1. symbol'],
       name: match['2. name'],
       type: match['3. type'],
@@ -61,6 +61,10 @@ export async function GET(request: NextRequest) {
       currency: match['8. currency'],
       matchScore: parseFloat(match['9. matchScore']),
     }))
+
+    const results = mappedResults.filter(
+      (stock: StockSearchItem) => stock.name && stock.name !== 'null'
+    )
 
     return NextResponse.json(results)
   } catch (error) {
