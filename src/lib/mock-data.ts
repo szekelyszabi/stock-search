@@ -147,38 +147,3 @@ export const MOCK_QUOTES: Record<string, StockQuote> = {
     changePercent: 0.38,
   },
 };
-
-function generatePriceHistory(
-  currentPrice: number,
-  days: number = 30
-): Array<{ date: string; price: number }> {
-  const history: Array<{ date: string; price: number }> = [];
-  const today = new Date("2024-01-15");
-
-  for (let i = days - 1; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    const randomChange = (Math.random() - 0.5) * currentPrice * 0.03;
-    const price = currentPrice + randomChange;
-
-    history.push({
-      date: date.toISOString().split("T")[0]!,
-      price: parseFloat(price.toFixed(2)),
-    });
-  }
-
-  return history;
-}
-
-export const MOCK_PRICE_HISTORY: Record<
-  string,
-  Array<{ date: string; price: number }>
-> = {
-  AAPL: generatePriceHistory(185.92),
-  MSFT: generatePriceHistory(402.56),
-  GOOGL: generatePriceHistory(142.35),
-  AMZN: generatePriceHistory(153.42),
-  TSLA: generatePriceHistory(238.45),
-  NVDA: generatePriceHistory(495.22),
-  META: generatePriceHistory(368.9),
-};

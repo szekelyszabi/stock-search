@@ -3,16 +3,17 @@
 import { Heart } from 'lucide-react'
 import { useStockQuote } from '@/hooks/use-stock-quote'
 import { useFavorites } from '@/hooks/use-favorites'
+import { useStockHistory } from '@/hooks/use-stock-history'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PriceHistoryChart } from '@/components/price-history-chart'
-import { MOCK_PRICE_HISTORY } from '@/lib/mock-data'
 
 export function StockDetailClient({ symbol }: { symbol: string }) {
   const { data: quote, error, isLoading } = useStockQuote(symbol)
   const { isFavorite, toggleFavorite, isHydrated } = useFavorites()
+  const { data: historyData } = useStockHistory(symbol)
 
   if (isLoading || !quote) {
     return (
@@ -122,7 +123,7 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
           </CardHeader>
           <CardContent>
             <PriceHistoryChart
-              data={MOCK_PRICE_HISTORY[quote.symbol] || []}
+              data={historyData || []}
               symbol={quote.symbol}
             />
           </CardContent>

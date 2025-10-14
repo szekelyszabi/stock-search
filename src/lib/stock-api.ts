@@ -1,19 +1,23 @@
 import { APP_CONFIG } from '@/constants/config'
 import type { StockQuote, StockSearchItem } from '@/types/stock'
-import { MOCK_SEARCH_RESULTS, MOCK_QUOTES } from './mock-data'
 
 export async function searchStocks(keywords: string): Promise<StockSearchItem[]> {
   if (!keywords || keywords.trim().length < APP_CONFIG.search.minQueryLength) {
     return []
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 100))
+  const params = new URLSearchParams({
+    keywords: keywords.trim(),
+  })
 
-  const query = keywords.trim().toLowerCase()
-  return MOCK_SEARCH_RESULTS.filter(
-    (stock) =>
-      stock.symbol.toLowerCase().includes(query) || stock.name.toLowerCase().includes(query)
-  )
+  const response = await fetch(`/api/stock/search?${params}`)
+
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.error || 'Failed to search stocks')
+  }
+
+  return response.json()
 }
 
 export async function getStockQuote(symbol: string): Promise<StockQuote> {
@@ -21,14 +25,29 @@ export async function getStockQuote(symbol: string): Promise<StockQuote> {
     throw new Error('Stock symbol is required')
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 100))
+  const response = await fetch(`/api/stock/quote/${symbol.trim().toUpperCase()}`)
 
-  const upperSymbol = symbol.trim().toUpperCase()
-  const quote = MOCK_QUOTES[upperSymbol]
-
-  if (!quote) {
-    throw new Error(`No data found for symbol: ${symbol}`)
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.error || 'Failed to fetch stock quote')
   }
 
-  return quote
+  return response.json()
+}
+
+export async function getStockHistory(
+  symbol: string
+): Promise<Array<{ date: string; price: number }>> {
+  if (!symbol || symbol.trim().length === 0) {
+    throw new Error('Stock symbol is required')
+  }
+
+  const response = await fetch(`/api/stock/history/${symbol.trim().toUpperCase()}`)
+
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.error || 'Failed to fetch stock history')
+  }
+
+  return response.json()
 }
