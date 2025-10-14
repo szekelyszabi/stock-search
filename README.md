@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stock Search App
 
-## Getting Started
+  A Next.js application for searching and viewing real-time stock data using the AlphaVantage API.
 
-First, run the development server:
+  ## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  - Real-time stock search with auto-suggestions
+  - Stock detail pages with current price, volume, and key metrics
+  - 30-day price history charts
+  - Favorites management with localStorage
+  - Responsive mobile design
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  ## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+  - **Next.js 15** (App Router with TypeScript)
+  - **TanStack Query** for data fetching and caching
+  - **Tailwind CSS** + **shadcn/ui** for styling
+  - **Recharts** for price charts
+  - **AlphaVantage API** for stock data
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+  ## Setup
 
-## Learn More
+  ```bash
+  # Install dependencies
+  npm install
 
-To learn more about Next.js, take a look at the following resources:
+  # Add your API key
+  echo "ALPHAVANTAGE_API_KEY=your_key_here" > .env.local
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  # Run development server
+  npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  Get a free API key at https://www.alphavantage.co/support/#api-key
 
-## Deploy on Vercel
+  Architecture Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  API Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  The app uses Next.js API routes (/api/stock/*) to proxy requests to AlphaVantage. This keeps the API key secure on the server and allows for server-side caching.
+
+  Hybrid Data Strategy
+
+  The popular stocks list on the homepage uses static mock data to avoid an unnecessary API call on every page load. All search results and stock detail pages fetch real-time data from the API. This approach balances user experience with API quota preservation.
+
+  Caching Strategy
+
+  TanStack Query is configured with a 5-minute staleTime to reduce API calls. AlphaVantags free tier has a 25 requests/day limit, so aggressive caching is essential.
+
+  Search queries are debounced by 500ms to avoid excessive API calls while typing.
+
+  Code Organization
+
+  src/
+  ├── app/              # Pages and API routes
+  ├── components/       # React components
+  ├── hooks/            # Custom hooks (debounce, queries)
+  ├── lib/              # API service layer
+  └── types/            # TypeScript interfaces
+
+  Scripts
+
+  npm run dev          # Development server
+  npm run build        # Production build
+  npm run lint         # Run linter
+  npm run type-check   # TypeScript check
+
+  Deployment
+
+  Built to deploy on Vercel with zero configuration.
