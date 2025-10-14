@@ -15,7 +15,15 @@ export default function FavoritesPage() {
     <div className="px-4 py-8 sm:px-8">
       <main className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold">Favorites</h1>
+          <div className="mb-8">
+            <Link
+              href="/"
+              className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1 mb-4"
+            >
+              ← Back to search
+            </Link>
+            <h1 className="text-3xl md:text-4xl font-bold">My Favorites</h1>
+          </div>
           {isHydrated && favoriteStocks.length > 0 && (
             <Button variant="outline" onClick={clearAll}>
               Clear All

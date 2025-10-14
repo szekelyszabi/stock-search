@@ -26,7 +26,15 @@ export default function SearchPage() {
   return (
     <div className="px-4 py-8 sm:px-8">
       <main className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Stock Search</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold">Stock Search</h1>
+          <Link
+            href="/favorites"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            View Favorites →
+          </Link>
+        </div>
 
         <div className="mb-8">
           <p className="text-muted-foreground">Search for stocks by symbol or company name</p>

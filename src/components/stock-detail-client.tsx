@@ -17,8 +17,7 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
 
   if (isLoading || !quote) {
     return (
-      <div className="px-4 py-8 sm:px-8">
-        <main className="max-w-4xl mx-auto">
+      <>
           <div className="mb-8">
             <Skeleton className="h-10 w-48" />
           </div>
@@ -54,21 +53,19 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
               </div>
             </CardContent>
           </Card>
-        </main>
-      </div>
+      </>
     )
   }
 
   if (error) {
     const isRateLimit = error.message.includes('rate limit')
     return (
-      <div className="px-4 py-8 sm:px-8">
-        <main className="max-w-4xl mx-auto">
+        <>
           <Card className={isRateLimit ? 'border-yellow-500' : 'border-red-500'}>
             <CardContent className="pt-6">
               <div className="space-y-2">
                 <h3 className="font-semibold">
-                  {isRateLimit ? '⏰ Rate Limit Reached' : '❌ Error'}
+                  {isRateLimit ? 'Rate Limit Reached' : 'Error'}
                 </h3>
                 <p className="text-sm text-muted-foreground">{error.message}</p>
                 {isRateLimit && (
@@ -79,18 +76,16 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
               </div>
             </CardContent>
           </Card>
-        </main>
-      </div>
+        </>
     )
   }
 
   const isPositive = quote.change >= 0
 
   return (
-    <div className="px-4 py-8 sm:px-8">
-      <main className="max-w-4xl mx-auto">
+      <>
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold">{quote.symbol}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold">{quote.symbol}</h1>
           {isHydrated && (
             <Button
               variant="outline"
@@ -106,7 +101,7 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
         <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="mb-4">
-              <div className="text-4xl font-bold">${quote.price.toFixed(2)}</div>
+              <div className="text-3xl md:text-4xl font-bold">${quote.price.toFixed(2)}</div>
               <Badge variant={isPositive ? 'default' : 'destructive'} className="mt-2">
                 {isPositive ? '+' : ''}
                 {quote.change.toFixed(2)} ({isPositive ? '+' : ''}
@@ -155,7 +150,6 @@ export function StockDetailClient({ symbol }: { symbol: string }) {
             </div>
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </>
   )
 }
